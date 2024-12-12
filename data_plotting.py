@@ -3,6 +3,16 @@ import pandas as pd
 
 
 def create_and_save_plot(data, ticker, period, filename=None):
+    '''
+    Создаёт график, отображающий цены закрытия и скользящие средние.
+    Предоставляет возможность сохранения графика в файл.
+     Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
+    :param data: DataFrame с данными
+    :param ticker: Тикер акции
+    :param period: Период акций
+    :param filename: Название файла
+    :return: Создаёт график, отображающий цены закрытия и скользящие средние
+    '''
     plt.figure(figsize=(10, 6))
 
     if 'Date' not in data:
@@ -32,8 +42,27 @@ def create_and_save_plot(data, ticker, period, filename=None):
 
 
 def calculate_and_display_average_price(data):
+    '''
+    Вычисляет и выводит среднюю цену закрытия акций за заданный период
+    :param data: DataFrame с данными
+    :return: Выводит среднюю цену закрытия акций за заданный период
+    '''
     if 'Close' in data:
         average_price = data['Close'].mean()
         print(f"Средняя цена закрытия акций за заданный период: {average_price:.2f}")
     else:
         print("Информация о дате отсутствует или не имеет распознаваемого формата.")
+
+def notify_if_strong_fluctuations(data, threshold):
+    '''
+    Функция анализирует данные и уведомляет пользователя, если цена акций колебалась более чем на заданный процент за период
+    :param data: DataFrame с данными
+    :param threshold: Парог для сравнения с максимальным и минимальными значениями
+    :return: Пользователь получает уведомление если превышен парог
+    '''
+    max_stock = max([b for b in data['Close'].values])
+    min_stock = min([b for b in data['Close'].values])
+    if max_stock - min_stock > threshold:
+        print(f'User, разница {max_stock - min_stock} превышает порог {threshold}')
+    else:
+        pass
