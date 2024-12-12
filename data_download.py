@@ -16,9 +16,9 @@ def fetch_stock_data(ticker, period='1mo'):
 def add_moving_average(data, window_size=7):
     '''
     Добавляет в DataFrame колонку со скользящим средним, рассчитанным на основе цен закрытия.
-    :param data:
-    :param window_size:
-    :return:
+    :param data: Данные торгов
+    :param window_size: размер окна
+    :return: DataFrame с данными
     '''
     data['Moving_Average'] = data['Close'].rolling(window=window_size).mean()
     return data

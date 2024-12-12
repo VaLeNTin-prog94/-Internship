@@ -18,7 +18,10 @@ def main():
     #
     # # Plot the data
     dplt.create_and_save_plot(stock_data, ticker, period)
+    # Average the data
     dplt.calculate_and_display_average_price(stock_data)
+    # Difference the data
+    dplt.notify_if_strong_fluctuations(stock_data, 2)
 if __name__ == "__main__":
     main()
 
