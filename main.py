@@ -22,6 +22,7 @@ def main():
     dplt.calculate_and_display_average_price(stock_data)
     # Difference the data
     dplt.notify_if_strong_fluctuations(stock_data, 2)
+    dplt.export_data_to_csv(stock_data,'output.csv')
 if __name__ == "__main__":
     main()
 

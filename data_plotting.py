@@ -53,6 +53,7 @@ def calculate_and_display_average_price(data):
     else:
         print("Информация о дате отсутствует или не имеет распознаваемого формата.")
 
+
 def notify_if_strong_fluctuations(data, threshold):
     '''
     Функция анализирует данные и уведомляет пользователя, если цена акций колебалась более чем на заданный процент за период
@@ -66,3 +67,19 @@ def notify_if_strong_fluctuations(data, threshold):
         print(f'User, разница {max_stock - min_stock} превышает порог {threshold}')
     else:
         pass
+
+
+def export_data_to_csv(data, filename):
+    '''
+    Cохраняет загруженные данные об акциях в CSV файл.
+
+    :param data:DataFrame с данными
+    :param filename: название файла
+    :return:Результат сохранения акий в CSV файл
+    '''
+    df = pd.DataFrame(data)
+    try:
+        df.to_csv(filename, encoding='utf-8')
+        print('Файлы успешно записаны')
+    except Exception as e:
+        print(f"Произошла ошибка: {e}.")
