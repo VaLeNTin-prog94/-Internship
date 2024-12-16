@@ -41,6 +41,7 @@ def create_and_save_plot(data, ticker, period, filename=None):
     print(f"График сохранен как {filename}")
 
 
+
 def calculate_and_display_average_price(data):
     '''
     Вычисляет и выводит среднюю цену закрытия акций за заданный период
@@ -61,12 +62,15 @@ def notify_if_strong_fluctuations(data, threshold):
     :param threshold: Парог для сравнения с максимальным и минимальными значениями
     :return: Пользователь получает уведомление если превышен парог
     '''
-    max_stock = max([b for b in data['Close'].values])
-    min_stock = min([b for b in data['Close'].values])
-    if max_stock - min_stock > threshold:
-        print(f'User, разница {max_stock - min_stock} превышает порог {threshold}')
-    else:
-        pass
+    try:
+        max_stock = max([b for b in data['Close'].values])
+        min_stock = min([b for b in data['Close'].values])
+        if max_stock - min_stock > threshold:
+            print(f'User, разница {max_stock - min_stock} превышает порог {threshold}')
+        else:
+            pass
+    except Exception as e:
+        print(f'Ошибка {e}')
 
 
 def export_data_to_csv(data, filename):
@@ -83,3 +87,39 @@ def export_data_to_csv(data, filename):
         print('Файлы успешно записаны')
     except Exception as e:
         print(f"Произошла ошибка: {e}.")
+
+def plot_data(data, ticker, period, filename=None):
+    '''
+    Создаёт график, отображающий индикатор RSI
+    Предоставляет возможность сохранения графика в файл.
+     Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
+    :param data: DataFrame с данными
+    :param ticker: Тикер акции
+    :param period: Период акций
+    :param filename: Название файла
+    :return: Создаёт график, отображающий индикатор RSI
+    '''
+    plt.figure(figsize=(10, 6))
+
+    if 'Date' not in data:
+        if pd.api.types.is_datetime64_any_dtype(data.index):
+            dates = data.index.to_numpy()
+            plt.plot(dates, data['RSI'].values, label='RSI')
+        else:
+            print("Информация о дате отсутствует или не имеет распознаваемого формата.")
+            return
+    else:
+        if not pd.api.types.is_datetime64_any_dtype(data['Date']):
+            data['Date'] = pd.to_datetime(data['Date'])
+        plt.plot(data['Date'], data['RSI'], label='RSI')
+
+    plt.title(f"{ticker} Индекс относительной силы (RSI)")
+    plt.xlabel("Дата")
+    plt.ylabel("RSI")
+    plt.legend()
+
+    if filename is None:
+        filename = f"{ticker}_{period}_stock_RSI_chart.png"
+
+    plt.savefig(filename)
+    print(f"График сохранен как {filename}")
