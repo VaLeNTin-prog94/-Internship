@@ -2,14 +2,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def create_and_save_plot(data, ticker, period, filename=None):
+def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
     '''
     Создаёт график, отображающий цены закрытия и скользящие средние.
     Предоставляет возможность сохранения графика в файл.
-     Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
+    Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
     :param data: DataFrame с данными
     :param ticker: Тикер акции
-    :param period: Период акций
+    :param start_date: начало периода
+    :param end_date:  конец приода
     :param filename: Название файла
     :return: Создаёт график, отображающий цены закрытия и скользящие средние
     '''
@@ -35,11 +36,10 @@ def create_and_save_plot(data, ticker, period, filename=None):
     plt.legend()
 
     if filename is None:
-        filename = f"{ticker}_{period}_stock_price_chart.png"
+        filename = f"{ticker}_{start_date}-{end_date}_stock_price_chart.png"
 
     plt.savefig(filename)
     print(f"График сохранен как {filename}")
-
 
 
 def calculate_and_display_average_price(data):
@@ -88,14 +88,16 @@ def export_data_to_csv(data, filename):
     except Exception as e:
         print(f"Произошла ошибка: {e}.")
 
-def plot_data(data, ticker, period, filename=None):
+
+def plot_data(data, ticker, start_date, end_date, filename=None):
     '''
     Создаёт график, отображающий индикатор RSI
     Предоставляет возможность сохранения графика в файл.
-     Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
+    Параметр filename опционален; если он не указан, имя файла генерируется автоматически.
     :param data: DataFrame с данными
     :param ticker: Тикер акции
-    :param period: Период акций
+    :param start_date: начало периода
+    :param end_date:  конец приода
     :param filename: Название файла
     :return: Создаёт график, отображающий индикатор RSI
     '''
@@ -119,7 +121,7 @@ def plot_data(data, ticker, period, filename=None):
     plt.legend()
 
     if filename is None:
-        filename = f"{ticker}_{period}_stock_RSI_chart.png"
+        filename = f"{ticker}_{start_date}-{end_date}_stock_RSI_chart.png"
 
     plt.savefig(filename)
     print(f"График сохранен как {filename}")
