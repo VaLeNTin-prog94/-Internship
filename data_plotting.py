@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
+def create_and_save_plot(data, ticker, start_date, end_date, style, filename=None):
     '''
     Создаёт график, отображающий цены закрытия и скользящие средние.
     Предоставляет возможность сохранения графика в файл.
@@ -11,16 +11,21 @@ def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
     :param ticker: Тикер акции
     :param start_date: начало периода
     :param end_date:  конец приода
+    :param style: выбор стиля графика
     :param filename: Название файла
     :return: Создаёт график, отображающий цены закрытия и скользящие средние
     '''
     plt.figure(figsize=(10, 6))
-
+    plt.style.use(style)
     if 'Date' not in data:
         if pd.api.types.is_datetime64_any_dtype(data.index):
             dates = data.index.to_numpy()
             plt.plot(dates, data['Close'].values, label='Close Price')
             plt.plot(dates, data['Moving_Average'].values, label='Moving Average')
+            plt.plot(data.index, data['Moving_Average'] + data['stddev_close'], color='orange', alpha=0.5,
+                     label='Стандартное отклоение +')
+            plt.plot(data.index, data['Moving_Average'] - data['stddev_close'], color='black', alpha=0.5,
+                     label='Стандартное отклоение -')
         else:
             print("Информация о дате отсутствует или не имеет распознаваемого формата.")
             return
@@ -29,6 +34,10 @@ def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
             data['Date'] = pd.to_datetime(data['Date'])
         plt.plot(data['Date'], data['Close'], label='Close Price')
         plt.plot(data['Date'], data['Moving_Average'], label='Moving Average')
+        plt.plot(data.index, data['Moving_Average'] + data['stddev_close'], color='orange', alpha=0.5,
+                 label='Стандартное отклоение '+'')
+        plt.plot(data.index, data['Moving_Average'] - data['stddev_close'], color='black', alpha=0.5,
+                 label='Стандартное отклоение '-'')
 
     plt.title(f"{ticker} Цена акций с течением времени")
     plt.xlabel("Дата")
@@ -36,7 +45,7 @@ def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
     plt.legend()
 
     if filename is None:
-        filename = f"{ticker}_{start_date}-{end_date}_stock_price_chart.png"
+        filename = f"{ticker}_{start_date}-{end_date}-{style}_stock_price_chart.png"
 
     plt.savefig(filename)
     print(f"График сохранен как {filename}")

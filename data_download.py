@@ -25,6 +25,7 @@ def add_moving_average(data, window_size=7):
     :return: DataFrame с данными
     '''
     data['Moving_Average'] = data['Close'].rolling(window=window_size).mean()
+    data['stddev_close'] = data['Close'].std() # Стандартное отклонение
     return data
 
 
