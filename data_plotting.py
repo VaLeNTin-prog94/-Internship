@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
+def create_and_save_plot(data, ticker, start_date, end_date, style, filename=None):
     '''
     Создаёт график, отображающий цены закрытия и скользящие средние.
     Предоставляет возможность сохранения графика в файл.
@@ -11,11 +11,12 @@ def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
     :param ticker: Тикер акции
     :param start_date: начало периода
     :param end_date:  конец приода
+    :param style: выбор стиля графика
     :param filename: Название файла
     :return: Создаёт график, отображающий цены закрытия и скользящие средние
     '''
     plt.figure(figsize=(10, 6))
-
+    plt.style.use(style)
     if 'Date' not in data:
         if pd.api.types.is_datetime64_any_dtype(data.index):
             dates = data.index.to_numpy()
@@ -36,7 +37,7 @@ def create_and_save_plot(data, ticker, start_date, end_date, filename=None):
     plt.legend()
 
     if filename is None:
-        filename = f"{ticker}_{start_date}-{end_date}_stock_price_chart.png"
+        filename = f"{ticker}_{start_date}-{end_date}-{style}_stock_price_chart.png"
 
     plt.savefig(filename)
     print(f"График сохранен как {filename}")
