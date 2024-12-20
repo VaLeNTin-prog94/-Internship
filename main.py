@@ -19,7 +19,6 @@ def main():
     stock_data = dd.fetch_stock_data(ticker, start_date, end_date)
     # Add moving average to the data
     stock_data = dd.add_moving_average(stock_data)
-
     # Plot the data
     dplt.create_and_save_plot(stock_data, ticker, start_date, end_date, chosen_style)
     # Average the data
