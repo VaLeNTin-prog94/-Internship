@@ -30,7 +30,7 @@ def main():
     indicator_data = dd.calculate_indicator('output.csv')
     # Plot the indicator_data
     dplt.plot_data(indicator_data, ticker, start_date, end_date, filename=None)
-
+    dplt.plot_close_average(stock_data)
 
 if __name__ == "__main__":
     main()

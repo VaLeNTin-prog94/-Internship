@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.graph_objects as go
 
 
 def create_and_save_plot(data, ticker, start_date, end_date, style, filename=None):
@@ -35,9 +36,9 @@ def create_and_save_plot(data, ticker, start_date, end_date, style, filename=Non
         plt.plot(data['Date'], data['Close'], label='Close Price')
         plt.plot(data['Date'], data['Moving_Average'], label='Moving Average')
         plt.plot(data.index, data['Moving_Average'] + data['stddev_close'], color='orange', alpha=0.5,
-                 label='Стандартное отклоение '+'')
+                 label='Стандартное отклоение ' + '')
         plt.plot(data.index, data['Moving_Average'] - data['stddev_close'], color='black', alpha=0.5,
-                 label='Стандартное отклоение '-'')
+                 label='Стандартное отклоение ' - '')
 
     plt.title(f"{ticker} Цена акций с течением времени")
     plt.xlabel("Дата")
@@ -134,3 +135,35 @@ def plot_data(data, ticker, start_date, end_date, filename=None):
 
     plt.savefig(filename)
     print(f"График сохранен как {filename}")
+
+
+def plot_close_average(data):
+    '''
+    Функия для рисования интерактивного графика plotly
+    :param data: DataFrame с данными
+    :return: Выводит plotly график и среднее значение за текущий период закрытия торгов
+    '''
+    # Проверяем, существует ли колонка 'Close'
+    if 'Close' not in data.columns:
+        print("Column 'Close' does not exist in the DataFrame.")
+        return
+        # Создаем интерактивный график
+    fig = go.Figure()
+    # Вычисляем среднее значение
+    mean_close = data['Close'].mean()
+    print(f"The average value of 'Close' is: {mean_close}")
+    # Добавляем линию графика для 'Close'
+    fig.add_trace(go.Scatter(x=data.index, y=data['Close'], mode='lines', name='Close Price'))
+
+    # Добавляем горизонтальную линию для среднего значения
+    fig.add_trace(go.Scatter(x=data.index, y=[mean_close] * len(data), mode='lines', name='Average Close Price',
+                             line=dict(dash='dash', color='red')))
+
+    # Настраиваем макет графика
+    fig.update_layout(title='Close Price and Average Close Price',
+                      xaxis_title='Date',
+                      yaxis_title='Price',
+                      legend=dict(x=0, y=1))
+
+    # Показываем график
+    fig.show()
